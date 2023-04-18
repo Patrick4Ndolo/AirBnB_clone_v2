@@ -17,7 +17,7 @@ class FileStorage:
             class_name = cls.__name__
             for key, value in FileStorage.__objects.items():
                 if (class_name in key):
-                    objectes_by_class[key] = value
+                    objects_by_class[key] = value
             return objects_by_class
 
     def new(self, obj):
@@ -56,3 +56,10 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """deletes obj from __objects if it is inside"""
+        if obj is not None:
+            key = "{} . {}".format(obj.__class__.__name__, obj.id)
+            if kay in FileStorage.__objects:
+                del FileStorage.__objects[key]
