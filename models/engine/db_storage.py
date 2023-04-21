@@ -12,58 +12,73 @@ from models.review import Review
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 
-class DBStorage():
-    """ Class for the DB """
+class DBStorage:
     __engine = None
     __session = None
 
     def __init__(self):
-        """ attrs of storage """
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(os.getenv("HBNB_MYSQL_USER"),
-                                              os.getenv("HBNB_MYSQL_PWD"),
-                                              os.getenv("HBNB_MYSQL_HOST"),
-                                              os.getenv("HBNB_MYSQL_DB")),
-                                      pool_pre_ping=True)
+        HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
+        HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
+        HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST', default='localhost')
+        HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
+        HBNB_ENV = getenv('HBNB_ENV')
 
-        if os.getenv("HBNB_ENV") == "test":
-            Base.metadata.drop_all(self.__engine)
+        # self.__engine = create_engine({
+        #     'engine': 'mysql+mysqldb',
+        #     'user': HBNB_MYSQL_USER,
+        #     'password': HBNB_MYSQL_PWD,
+        #     'host': HBNB_MYSQL_HOST,
+        #     'database': HBNB_MYSQL_DB,
+        #     'pool_pre_ping': True
+        # })
+        self.__engine = create_engine(
+            'mysql+mysqldb://' +
+            HBNB_MYSQL_USER +
+            ':' +
+            HBNB_MYSQL_PWD +
+            '@' +
+            HBNB_MYSQL_HOST +
+            '/' +
+            HBNB_MYSQL_DB)
+
+        if HBNB_ENV == 'test':
+            Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
-        """ all objects of cls d = dict"""
-        classes = [City, State, User, Place, Review, Amenity]
-        d = {}
-        query = []
+        classes = [User, State, City, Amenity, Place, Review]
+        objects = {}
 
-        if cls:
-            query = self.__session.query(cls)
+        if cls is not None:
+            if cls in classes:
+                return {obj.__class__.__name__ + '.' + obj.id:
+                        obj for obj in self.__session.query(cls).all()}
+            else:
+                return {}
         else:
-            for cls in classes:
-                query += self.__session.query(cls)
-
-        d = {type(value).__name__ + "." + value.id: value for value in query}
-        return d
+            for c in classes:
+                for obj in self.__session.query(text(c.__name__)).all():
+                    objects[obj.__class__.__name__ + '.' + obj.id] = obj
+            return objects
 
     def new(self, obj):
-        """ add obj in the DB """
         self.__session.add(obj)
 
     def save(self):
-        """ Commit in the DB """
         self.__session.commit()
 
     def delete(self, obj=None):
-        """ Delete obj """
-        if obj:
+        if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
-        """ create tables """
         Base.metadata.create_all(self.__engine)
-
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        self.__session = scoped_session(Session)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
+        self.__session = Session()
 
     def close(self):
-        """ Remove or close the session """
-        self.__session.close()
+        """call remove() method on the private session attribute"""
+        self.__session.__class__.close(self.__session)
+        self.reload()
+
