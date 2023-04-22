@@ -1,15 +1,16 @@
 #!/usr/bin/python3
-""" Modules for DBstorage """
-import os
-from sqlalchemy import (create_engine)
+"""database storage engine"""
+from os import getenv
 from models.base_model import Base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import text
 from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 class DBStorage:
@@ -81,4 +82,3 @@ class DBStorage:
         """call remove() method on the private session attribute"""
         self.__session.__class__.close(self.__session)
         self.reload()
-
