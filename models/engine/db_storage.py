@@ -1,6 +1,12 @@
 #!/usr/bin/python3
+<<<<<<< HEAD
 """database storage engine"""
 from os import getenv
+=======
+""" Modules for DBstorage """
+import os import getenv
+from sqlalchemy import create_engine
+>>>>>>> a98a74f0175dec694172e1f7329c8504236e7175
 from models.base_model import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -11,6 +17,11 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+<<<<<<< HEAD
+=======
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import text
+>>>>>>> a98a74f0175dec694172e1f7329c8504236e7175
 
 
 class DBStorage:
