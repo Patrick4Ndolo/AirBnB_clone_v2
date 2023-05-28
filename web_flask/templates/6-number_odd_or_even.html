@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <HTML lang="en">
-<HEAD>
-	<TITLE>HBNB</TITLE>
-</HEAD>
-<BODY>
-	{% if num is divisibleby(2) %}
-	<H1>Number: {{ num }} is even</H1>
+    <HEAD>
+        <TITLE>HBNB</TITLE>
+    </HEAD>
+    <BODY>
+        {% if (value % 2 == 0) %}
+        <H1>Number: {{ value }} is even</H1>
 	{% else %}
-	<H1>Number: {{ num }} is odd</H1>
+	<H1>Number: {{ value }} is odd</H1>
 	{% endif %}
-</BODY>
+    </BODY>
 </HTML>

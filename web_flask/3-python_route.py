@@ -1,34 +1,47 @@
 #!/usr/bin/python3
-"""Importing Flask framework"""
+
+"""
+Flask web App
+"""
 from flask import Flask
-
-app = Flask(__name__)
-
-
-@app.route("/", strict_slashes=False)
-def hello_world():
-    """returns hello HBNB"""
-    return "Hello HBNB!"
+app = Flask("__name__")
 
 
-@app.route("/hbnb", strict_slashes=False)
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """
+    hello_hbnb: displays return value
+    """
+    return 'Hello, HBNB!'
+
+
+@app.route('/hbnb', strict_slashes=False)
 def hbnb():
-    """returns HBNB"""
-    return "HBNB"
+    """
+    hbnb: displays hbnb
+    """
+    return 'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def text(text):
-    """return text provided"""
-    return "C {}".format(text.replace("_", " "))
+def c_is_fun(text):
+    """
+    c_is_fun: replaces _ with " " and displays kwags
+    """
+    return "C " + text.replace("_", " ")
 
 
-@app.route('/python/', defaults={'text': 'is_cool'})
+@app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
-def display(text):
-    """displays “Python ”, followed by the value of the text"""
-    return "Python {}".format(text.replace("_", " "))
+def python_is_cool(text='is_cool'):
+    """
+    python_is_cool: replaces _  with " " and displays kwags
+    """
+    return "Python " + text.replace("_", " ")
 
 
-if __name__ == '__main__':
+if (__name__) == "__main__":
+    """
+    main function
+    """
     app.run(host='0.0.0.0', port=5000)

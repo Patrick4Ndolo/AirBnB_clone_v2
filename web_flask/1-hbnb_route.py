@@ -1,18 +1,28 @@
 #!/usr/bin/python3
-"""python script to display hello hbnb! and HBNB"""
 
+"""
+Flask Web Application
+"""
 from flask import Flask
 app = Flask(__name__)
-@app.route("/", strict_slashes=False)
-def index():
-    return "Hello HBNB!"
 
 
-@app.route("/hbnb", strict_slashes=False)
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """
+    Prints: Hello, HBNB!
+    """
+    return 'Hello, HBNB!'
+
+
+@app.route('/hbnb', strict_slashes=False)
 def hbnb():
-    """The method returns HBNB"""
+    """
+    displays: Prints HBNB
+    """
     return "HBNB"
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0", port=5000)
+if (__name__) == "__main__":
+    """Main function"""
+    app.run(host='0.0.0.0', port=5000)

@@ -1,42 +1,42 @@
 #!/usr/bin/python3
-"""importing Flask framework
+
+"""
+Flash Web App Python is Cool
 """
 from flask import Flask
-
 app = Flask(__name__)
 
 
-@app.route("/", strict_slashes=False)
-def hello_world():
-    """returns hello hbhb
-    """
-    return "Hello HBNB!"
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """ Prints a Message when / is called """
+    return 'Hello HBNB!'
 
 
-@app.route("/hbnb", strict_slashes=False)
-def HBNB():
-    """returns HBNB"""
-    return "HBNB"
+@app.route('/hbnb', strict_slashes=False)
+def hbnb():
+    """ Prints a Message when /hbnb is called """
+    return 'HBNB'
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def text(text):
-    """return text given"""
-    return "C {}".format(text.replace("_", " "))
+def c_is_fun(text):
+    """ Prints a Message when /c is called """
+    return "C " + text.replace('_', ' ')
 
 
-@app.route('/python/', defaults={'text': 'is_cool'})
+@app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
-def display(text):
-    """display “Python ”, followed by the value of the text"""
-    return "Python {}".format(text.replace("_", " "))
+def python_is_cool(text='is_cool'):
+    """ Prints a Message when /python is called """
+    return "Python " + text.replace('_', ' ')
 
 
 @app.route('/number/<int:n>', strict_slashes=False)
-def num_display(n):
-    """displays “n is a number” only"""
-    return "{} is a number".format(n)
-
+def is_n_number(n):
+    """ Prints a Message when /number is called only if n is an int"""
+    return f"{n:d} is a number"
 
 if __name__ == "__main__":
+    """ Main Function """
     app.run(host='0.0.0.0', port=5000)
